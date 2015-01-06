@@ -24,8 +24,6 @@ public class MainActivity extends Activity
 {
 	
     public static final String TAG = null;
-	public PowerManager manager;
-    public WakeLock wl;
     public Button button;
     public Button button3;
     public TextView tv;
