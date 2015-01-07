@@ -1,86 +1,84 @@
 package com.kritikalerror.cpuinfo;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import com.kritikalerror.cpuinfo.adapter.TabsAdapter;
 
 import com.example.cpuinfo.R;
-
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.app.FragmentTransaction;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PowerManager;
-import android.os.PowerManager.WakeLock;
-import android.os.SystemClock;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 
-public class MainActivity extends Activity 
-{
-	
-    public static final String TAG = null;
-    public Button button;
-    public Button button3;
-    public TextView tv;
-    
-    Button btnClosePopup; 
-    Button popup;
+@SuppressLint("NewApi")
+public class MainActivity extends FragmentActivity implements
+		ActionBar.TabListener {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) 
-    {
-        super.onCreate(savedInstanceState);
+	private ViewPager viewPager;
+	private TabsAdapter mAdapter;
+	private ActionBar actionBar;
+	// Tab titles
+	private String[] tabs = { "Most Recent", "CPU Info", "News Feed?" };
+
+	@SuppressLint("NewApi")
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-		// Display CPU Info in popup dialog
-		tv = (TextView)findViewById(R.id.tv);
-    	tv.setText("CPU Info: \n" + getInfo());	 
-    }
 
-    @Override
-    protected void onResume() 
-    {
-        super.onResume();
-    }
+		viewPager = (ViewPager) findViewById(R.id.pager);
+		actionBar = getActionBar();
+		mAdapter = new TabsAdapter(getSupportFragmentManager());
 
-    @Override
-    protected void onPause() 
-    {
-        super.onPause();
-    }
-    
-    private String getInfo() 
-    {
-        StringBuffer sb = new StringBuffer();
-        sb.append("CPU ABI: ").append(Build.CPU_ABI).append("\n");
-        if (new File("/proc/cpuinfo").exists()) 
-        {
-            try 
-            {
-                BufferedReader br = new BufferedReader(new FileReader(new File("/proc/cpuinfo")));
-                String line;
-                while ((line = br.readLine()) != null) 
-                {
-                    sb.append(line + "\n");
-                }
-                if (br != null) 
-                {
-                    br.close();
-                }
-            } 
-            catch (IOException e) 
-            {
-                e.printStackTrace();
-            } 
-        }
-        return sb.toString();
-    }
+		viewPager.setAdapter(mAdapter);
+		actionBar.setHomeButtonEnabled(false);
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);		
 
+		// Adding Tabs
+		for (String tab_name : tabs) {
+			actionBar.addTab(actionBar.newTab().setText(tab_name)
+					.setTabListener(this));
+		}
 
-    
+		/**
+		 * on swiping the viewpager make respective tab selected
+		 * */
+		viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+			@Override
+			public void onPageSelected(int position) {
+				// on changing the page
+				// make respected tab selected
+				actionBar.setSelectedNavigationItem(position);
+			}
+
+			@Override
+			public void onPageScrolled(int arg0, float arg1, int arg2) {
+			}
+
+			@Override
+			public void onPageScrollStateChanged(int arg0) {
+			}
+		});
+	}
+
+	@Override
+	public void onTabReselected(Tab tab, FragmentTransaction ft) {
+	}
+
+	@SuppressLint("NewApi")
+	@Override
+	public void onTabSelected(Tab tab, FragmentTransaction ft) {
+		// on tab selected
+		// show respected fragment view
+		viewPager.setCurrentItem(tab.getPosition());
+	}
+
+	@Override
+	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+	}
+
 }
