@@ -19,12 +19,7 @@ import android.widget.TextView;
 public class CPUFragment extends Fragment {
 	
 	public static final String TAG = null;
-    public Button button;
-    public Button button3;
     public TextView tv;
-    
-    Button btnClosePopup; 
-    Button popup;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

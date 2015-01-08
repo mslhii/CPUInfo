@@ -13,7 +13,7 @@ public class TopFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		View rootView = inflater.inflate(R.layout.fragment_notifications, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_misc, container, false);
 		
 		return rootView;
 	}
