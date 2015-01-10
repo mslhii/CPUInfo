@@ -67,6 +67,8 @@ public class MiscFragment extends Fragment {
             try{
                 ArrayList<String> commandLine = new ArrayList<String>();
                 commandLine.add("top");
+                commandLine.add("-n");
+                commandLine.add("1");
                 
                 Process process = Runtime.getRuntime().exec(commandLine.toArray(new String[0]));
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -80,13 +82,13 @@ public class MiscFragment extends Fragment {
             catch (IOException e){
                 Log.e("CPU INFO", "Getting top failed", e);
             } 
-
+            
             return log;
         }
 
         @Override
         protected void onPostExecute(StringBuilder log){
-        	mFragmentText.setText("Process List: \n" + log);
+        	mFragmentText.setText("Process List: \n" + log.toString());
         	
         	if (null != mProgressDialog && mProgressDialog.isShowing())
             {
@@ -95,29 +97,4 @@ public class MiscFragment extends Fragment {
             }
         }
     }
-	
-	/*
-	private StringBuilder getLog() {
-		final StringBuilder log = new StringBuilder();
-        try{
-            ArrayList<String> commandLine = new ArrayList<String>();
-            commandLine.add("top");
-            //commandLine.add("-d");
-            
-            Process process = Runtime.getRuntime().exec(commandLine.toArray(new String[0]));
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            
-            String line;
-            while ((line = bufferedReader.readLine()) != null){ 
-                log.append(line);
-                log.append(" | "); 
-            }
-        } 
-        catch (IOException e){
-            Log.e("CPU INFO", "Getting top failed", e);
-        } 
-
-        return log;
-	}
-	*/
 }
