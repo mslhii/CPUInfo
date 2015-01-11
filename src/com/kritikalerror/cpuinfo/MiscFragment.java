@@ -10,6 +10,7 @@ import com.example.cpuinfo.R;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +29,7 @@ public class MiscFragment extends Fragment {
 	private CollectLogTask mCollectLogTask;
 	protected ProgressDialog mProgressDialog;
 	protected Context mContext;
+	private boolean mPauseFlag = true;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,8 +38,33 @@ public class MiscFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_processes, container, false);
 		mContext = rootView.getContext();
 		
+		Button pauseButton = (Button) rootView.findViewById(R.id.pause);
+		pauseButton.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+	            if (mPauseFlag)
+	            {
+	            	mPauseFlag = false;
+	            	Toast.makeText(mContext, "Unpaused!", Toast.LENGTH_LONG);
+	            	mCollectLogTask = (CollectLogTask) new CollectLogTask().execute(new ArrayList<String>());
+	            }
+	            else
+	            {
+	            	mPauseFlag = true;
+	            	Toast.makeText(mContext, "Paused!", Toast.LENGTH_LONG);
+	            }
+			}
+			
+		});
+		
 		mFragmentText = (TextView) rootView.findViewById(R.id.tops);
 		mCollectLogTask = (CollectLogTask) new CollectLogTask().execute(new ArrayList<String>());
+		//while(mPauseFlag)
+		//{
+		//	mCollectLogTask = (CollectLogTask) new CollectLogTask().execute(new ArrayList<String>());
+		//}
     	//mFragmentText.setText("Process List: \n" + getLog());	
 		
 		return rootView;
