@@ -19,13 +19,10 @@ public class TabsAdapter extends FragmentPagerAdapter {
 
 		switch (index) {
 		case 0:
-			// Top Rated fragment activity
-			return new MiscFragment();
-		case 1:
-			// Games fragment activity
 			return new CPUFragment();
+		case 1:
+			return new MiscFragment();
 		case 2:
-			// Movies fragment activity
 			return new TopFragment();
 		}
 

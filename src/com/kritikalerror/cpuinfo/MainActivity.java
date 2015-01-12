@@ -21,7 +21,7 @@ public class MainActivity extends FragmentActivity implements
 	private TabsAdapter mAdapter;
 	private ActionBar actionBar;
 	// Tab titles
-	private String[] tabs = { "Process List", "CPU Info", "Task Killer?" };
+	private String[] tabs = { "CPU Info", "Process List", "TBD" };
 
 	@SuppressLint("NewApi")
 	@Override
@@ -43,9 +43,6 @@ public class MainActivity extends FragmentActivity implements
 					.setTabListener(this));
 		}
 
-		/**
-		 * on swiping the viewpager make respective tab selected
-		 * */
 		viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
 			@Override

@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +30,8 @@ public class MiscFragment extends Fragment {
 	private CollectLogTask mCollectLogTask;
 	protected ProgressDialog mProgressDialog;
 	protected Context mContext;
-	private boolean mPauseFlag = true;
+	private String mTopString;
+	//private boolean mPauseFlag = true;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,6 +39,7 @@ public class MiscFragment extends Fragment {
 
 		View rootView = inflater.inflate(R.layout.fragment_processes, container, false);
 		mContext = rootView.getContext();
+		mTopString = "";
 		
 		Button pauseButton = (Button) rootView.findViewById(R.id.pause);
 		pauseButton.setOnClickListener(new View.OnClickListener() {
@@ -44,23 +47,31 @@ public class MiscFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				/*
 	            if (mPauseFlag)
 	            {
 	            	mPauseFlag = false;
-	            	Toast.makeText(mContext, "Unpaused!", Toast.LENGTH_LONG);
+	            	Toast.makeText(mContext, "Unpaused!", Toast.LENGTH_LONG).show();
 	            	mCollectLogTask = (CollectLogTask) new CollectLogTask().execute(new ArrayList<String>());
 	            }
 	            else
 	            {
 	            	mPauseFlag = true;
-	            	Toast.makeText(mContext, "Paused!", Toast.LENGTH_LONG);
+	            	Toast.makeText(mContext, "Paused!", Toast.LENGTH_LONG).show();
 	            }
+	            */
+				Toast.makeText(mContext, "Refreshing...", Toast.LENGTH_SHORT).show();
+	            mCollectLogTask = (CollectLogTask) new CollectLogTask().execute(new ArrayList<String>());
 			}
 			
 		});
 		
 		mFragmentText = (TextView) rootView.findViewById(R.id.tops);
-		mCollectLogTask = (CollectLogTask) new CollectLogTask().execute(new ArrayList<String>());
+		mFragmentText.setMovementMethod(new ScrollingMovementMethod());
+		if (mTopString.equals(""))
+		{
+			mCollectLogTask = (CollectLogTask) new CollectLogTask().execute(new ArrayList<String>());
+		}
 		//while(mPauseFlag)
 		//{
 		//	mCollectLogTask = (CollectLogTask) new CollectLogTask().execute(new ArrayList<String>());
@@ -73,21 +84,27 @@ public class MiscFragment extends Fragment {
 	private class CollectLogTask extends AsyncTask<ArrayList<String>, Void, StringBuilder>{
         @Override
         protected void onPreExecute(){
+        	/*
         	mProgressDialog = new ProgressDialog(mContext);
             mProgressDialog.setIndeterminate(true);
-            mProgressDialog.setMessage("Loading");
+            mProgressDialog.setMessage("Executing top...");
             mProgressDialog.setCancelable(true);
             mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener(){
                 public void onCancel(DialogInterface dialog){
                 	if (mCollectLogTask != null && mCollectLogTask.getStatus() == AsyncTask.Status.RUNNING) 
                     {
-                		Toast.makeText(mContext, "Stopped collecting top", Toast.LENGTH_LONG);
+                		Toast.makeText(mContext, "Stopped collecting top", Toast.LENGTH_SHORT).show();
+                		if (mTopString.equals(""))
+                		{
+                			mFragmentText.setText("Press refresh to run top again!");
+                		}
                         mCollectLogTask.cancel(true);
                         mCollectLogTask = null;
                     }
                 }
             });
             mProgressDialog.show();
+            */
         }
         
         @Override
@@ -105,11 +122,12 @@ public class MiscFragment extends Fragment {
                 String line;
                 while ((line = bufferedReader.readLine()) != null){ 
                     log.append(line);
-                    log.append(" | "); 
+                    log.append("\n"); 
                 }
             } 
             catch (IOException e){
                 Log.e("CPU INFO", "Getting top failed", e);
+                mFragmentText.setText("Cannot run top");
             } 
             
             return log;
@@ -117,13 +135,16 @@ public class MiscFragment extends Fragment {
 
         @Override
         protected void onPostExecute(StringBuilder log){
-        	mFragmentText.setText("Process List: \n" + log.toString());
+        	mTopString = log.toString();
+        	mFragmentText.setText(mTopString);
         	
+        	/*
         	if (null != mProgressDialog && mProgressDialog.isShowing())
             {
                 mProgressDialog.dismiss();
                 mProgressDialog = null;
             }
+            */
         }
     }
 }

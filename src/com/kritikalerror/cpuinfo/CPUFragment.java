@@ -10,6 +10,7 @@ import com.example.cpuinfo.R;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ public class CPUFragment extends Fragment {
 		
 		// Display CPU Info in popup dialog
 		tv = (TextView) rootView.findViewById(R.id.tv);
+		tv.setMovementMethod(new ScrollingMovementMethod());
     	tv.setText("CPU Info: \n" + getInfo());	
 		
 		return rootView;
