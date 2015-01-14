@@ -64,7 +64,10 @@ public class MiscFragment extends Fragment {
 	private class CollectLogTask extends AsyncTask<ArrayList<String>, Void, StringBuilder>{
         @Override
         protected void onPreExecute(){
-        	mFragmentText.setText("Running top command...");
+        	if (mTopString.equals(""))
+    		{
+        		mFragmentText.setText("Running top command...");
+    		}
         }
         
         @Override
@@ -96,7 +99,6 @@ public class MiscFragment extends Fragment {
         @Override
         protected void onPostExecute(StringBuilder log){
         	mTopString = log.toString();
-        	//mTopString = mTopString.replace(' ', '|');
         	mFragmentText.setText(mTopString);
         }
     }
