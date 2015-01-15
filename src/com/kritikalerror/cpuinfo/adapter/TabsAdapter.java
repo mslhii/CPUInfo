@@ -1,7 +1,7 @@
 package com.kritikalerror.cpuinfo.adapter;
 
 import com.kritikalerror.cpuinfo.CPUFragment;
-import com.kritikalerror.cpuinfo.TopFragment;
+import com.kritikalerror.cpuinfo.OthersFragment;
 import com.kritikalerror.cpuinfo.MiscFragment;
 
 import android.support.v4.app.Fragment;
@@ -23,7 +23,7 @@ public class TabsAdapter extends FragmentPagerAdapter {
 		case 1:
 			return new MiscFragment();
 		case 2:
-			return new TopFragment();
+			return new OthersFragment();
 		}
 
 		return null;
