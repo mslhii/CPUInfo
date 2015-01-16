@@ -29,6 +29,7 @@ public class MiscFragment extends Fragment {
 	public TextView mFragmentText;
 	protected Context mContext;
 	private String mTopString;
+	private String mHeaderString;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,6 +37,7 @@ public class MiscFragment extends Fragment {
 
 		View rootView = inflater.inflate(R.layout.fragment_processes, container, false);
 		mContext = rootView.getContext();
+		mHeaderString = "";
 		mTopString = "";
 		
 		Button pauseButton = (Button) rootView.findViewById(R.id.pause);
@@ -98,7 +100,38 @@ public class MiscFragment extends Fragment {
         @Override
         protected void onPostExecute(StringBuilder log){
         	mTopString = log.toString();
+        	
+        	logSplitter(mTopString);
+        	
         	mFragmentText.setText(mTopString);
         }
+        
+        private ArrayList<ArrayList<String>> logSplitter(String log)
+    	{
+    		ArrayList<ArrayList<String>> finalArray = new ArrayList<ArrayList<String>>();
+    		String[] splitLog = log.split(" ");
+    		boolean headerFlag = false;
+    		
+    		for(int i = 0; i < splitLog.length; i++)
+    		{
+    			Log.e("TEST", splitLog[i]);
+    			
+    			if(!splitLog[i].equals("PID"))
+    			{
+    				headerFlag = true;
+    			}
+    			
+    			if(!headerFlag)
+    			{
+    				mHeaderString = mHeaderString + splitLog[i];
+    			}
+    			else
+    			{
+    				//TODO:
+    			}
+    		}
+    		
+    		return finalArray;
+    	}
     }
 }
