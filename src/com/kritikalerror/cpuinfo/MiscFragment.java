@@ -30,6 +30,8 @@ public class MiscFragment extends Fragment {
 	protected Context mContext;
 	private String mTopString;
 	private String mHeaderString;
+	
+	final private int NUM_COLUMNS = 10;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -106,15 +108,17 @@ public class MiscFragment extends Fragment {
         	mFragmentText.setText(mTopString);
         }
         
-        private ArrayList<ArrayList<String>> logSplitter(String log)
+        private ArrayList<String[]> logSplitter(String log)
     	{
-    		ArrayList<ArrayList<String>> finalArray = new ArrayList<ArrayList<String>>();
+    		ArrayList<String[]> finalArray = new ArrayList<String[]>();
     		String[] splitLog = log.split(" ");
     		boolean headerFlag = false;
+    		String[] row = new String[NUM_COLUMNS];
     		
     		for(int i = 0; i < splitLog.length; i++)
     		{
     			Log.e("TEST", splitLog[i]);
+    			int j = 0;
     			
     			if(!splitLog[i].equals("PID"))
     			{
@@ -127,7 +131,14 @@ public class MiscFragment extends Fragment {
     			}
     			else
     			{
-    				//TODO:
+    				if(j == 10)
+    				{
+    					row = new String[NUM_COLUMNS];
+    					j = 0;
+    				}
+    				row[j] = splitLog[i];
+    				
+    				j++;
     			}
     		}
     		
