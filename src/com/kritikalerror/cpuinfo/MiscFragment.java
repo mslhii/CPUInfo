@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
@@ -36,6 +37,8 @@ public class MiscFragment extends Fragment {
 	private String mTopString;
 	private String mHeaderString;
 	private ArrayList<String[]> mTableString;
+	private ScrollView mScrollView;
+	private HorizontalScrollView mHorizScrollView;
 
 	final private int NUM_COLUMNS = 10;
 
@@ -61,23 +64,16 @@ public class MiscFragment extends Fragment {
 
 		});
 
+		mScrollView = new ScrollView(mContext);
+		mHorizScrollView = new HorizontalScrollView(mContext);
 		mFragmentText = (TextView) rootView.findViewById(R.id.tops);
 		mFragmentText.setMovementMethod(new ScrollingMovementMethod());
 		if (mTopString.equals(""))
 		{
 			new CollectLogTask().execute(new ArrayList<String>());
-			/*
-			ScrollView sv = new ScrollView(mContext);
-			int arListSize = mTableString.size();
-			String[] firstColumns = new String[arListSize];
-			for(int i = 0; i < arListSize; i++)
-			{
-				firstColumns[i] = mTableString.get(0)[0];
-			}
-			TableLayout tableLayout = createTableLayout(mTableString.get(0), firstColumns, NUM_COLUMNS, mTableString.size());
-			*/
 		}
 
+		((ViewGroup) rootView).addView(mScrollView);
 		return rootView;
 	}
 
@@ -168,7 +164,18 @@ public class MiscFragment extends Fragment {
 		protected void onPostExecute(StringBuilder log){
 			mTopString = log.toString();
 
-			logSplitter(mTopString);
+			mTableString = logSplitter(mTopString);
+			
+			int arListSize = mTableString.size();
+			Log.e("TAGGE", Integer.toString(arListSize));
+			String[] firstColumns = new String[arListSize];
+			for(int i = 0; i < arListSize; i++)
+			{
+				firstColumns[i] = mTableString.get(0)[0];
+			}
+			TableLayout tableLayout = createTableLayout(mTableString.get(0), firstColumns, NUM_COLUMNS, mTableString.size());
+			mHorizScrollView.addView(tableLayout);
+			mScrollView.addView(mHorizScrollView);
 
 			mFragmentText.setText(mTopString);
 		}
@@ -185,19 +192,23 @@ public class MiscFragment extends Fragment {
 				Log.e("TEST", splitLog[i]);
 				int j = 0;
 
-				if(!splitLog[i].equals("PID"))
+				if(splitLog[i].equals("PID"))
 				{
 					headerFlag = true;
+					Log.e("TAGGEH", "PID");
 				}
 
 				if(!headerFlag)
 				{
 					mHeaderString = mHeaderString + splitLog[i];
+					Log.e("TAGGEZ", "HEAD");
 				}
 				else
 				{
+					Log.e("TAGGET", Integer.toString(j));
 					if(j == 10)
 					{
+						Log.e("TAGGED", "ROW");
 						finalArray.add(row);
 						row = new String[NUM_COLUMNS];
 						j = 0;
