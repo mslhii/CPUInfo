@@ -77,7 +77,7 @@ public class MiscFragment extends Fragment {
 		return rootView;
 	}
 
-	private TableLayout createTableLayout(String [] rv, String [] cv,int rowCount, int columnCount) {
+	private TableLayout createTableLayout(String[] rv, String[] cv,int rowCount, int columnCount) {
 		TableLayout.LayoutParams tableLayoutParams = new TableLayout.LayoutParams();
 		TableLayout tableLayout = new TableLayout(mContext);
 		tableLayout.setBackgroundColor(Color.BLACK);
@@ -85,36 +85,32 @@ public class MiscFragment extends Fragment {
 		TableRow.LayoutParams tableRowParams = new TableRow.LayoutParams();
 		tableRowParams.setMargins(1, 1, 1, 1);
 		tableRowParams.weight = 1;
+		
+		String[] tempRow;
 
 		for (int i = 0; i < rowCount; i++) {
 			TableRow tableRow = new TableRow(mContext);
 			tableRow.setBackgroundColor(Color.BLACK);
+			tempRow = mTableString.get(i);
 
 			for (int j= 0; j < columnCount; j++) {
 				TextView textView = new TextView(mContext);
 				textView.setBackgroundColor(Color.WHITE);
 				textView.setGravity(Gravity.CENTER);
-
-				String s1 = Integer.toString(i);
-				String s2 = Integer.toString(j);
-				String s3 = s1 + s2;
-				int id = Integer.parseInt(s3);
-				Log.d("TAG", "-___>"+id);
-				if (i ==0 && j==0){
-					textView.setText("0==0");
-				} else if(i==0){
+				/*
+				if (i == 0 && j == 0){
+					textView.setText("GRAPH");
+				} else if(i == 0){
 					Log.d("TAAG", "set Column Headers");
-					textView.setText(cv[j-1]);
-				}else if( j==0){
+					textView.setText(tempRow[j]);
+				}else if(j == 0){
 					Log.d("TAAG", "Set Row Headers");
-					textView.setText(rv[i-1]);
+					textView.setText(tempRow[j]);
 				}else {
-					textView.setText(""+id);
-					if(id==23){
-						textView.setText("ID=23");
-
-					}
+					textView.setText(tempRow[j]);
 				}
+				*/
+				textView.setText(tempRow[j]);
 
 				tableRow.addView(textView, tableRowParams);
 			}
@@ -173,7 +169,8 @@ public class MiscFragment extends Fragment {
 			{
 				firstColumns[i] = mTableString.get(0)[0];
 			}
-			TableLayout tableLayout = createTableLayout(mTableString.get(0), firstColumns, NUM_COLUMNS, mTableString.size());
+			Log.e("TAGGZE", Integer.toString(mTableString.size()));
+			TableLayout tableLayout = createTableLayout(mTableString.get(0), firstColumns, mTableString.size(), NUM_COLUMNS);
 			mHorizScrollView.addView(tableLayout);
 			mScrollView.addView(mHorizScrollView);
 
@@ -186,11 +183,11 @@ public class MiscFragment extends Fragment {
 			String[] splitLog = log.split(" ");
 			boolean headerFlag = false;
 			String[] row = new String[NUM_COLUMNS];
+			int j = 0;
 
 			for(int i = 0; i < splitLog.length; i++)
 			{
 				Log.e("TEST", splitLog[i]);
-				int j = 0;
 
 				if(splitLog[i].equals("PID"))
 				{
