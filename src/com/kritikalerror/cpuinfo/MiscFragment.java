@@ -97,20 +97,8 @@ public class MiscFragment extends Fragment {
 				TextView textView = new TextView(mContext);
 				textView.setBackgroundColor(Color.WHITE);
 				textView.setGravity(Gravity.CENTER);
-				/*
-				if (i == 0 && j == 0){
-					textView.setText("GRAPH");
-				} else if(i == 0){
-					Log.d("TAAG", "set Column Headers");
-					textView.setText(tempRow[j]);
-				}else if(j == 0){
-					Log.d("TAAG", "Set Row Headers");
-					textView.setText(tempRow[j]);
-				}else {
-					textView.setText(tempRow[j]);
-				}
-				*/
 				textView.setText(tempRow[j]);
+				Log.e("TEST", tempRow[j]);
 
 				tableRow.addView(textView, tableRowParams);
 			}
@@ -163,16 +151,16 @@ public class MiscFragment extends Fragment {
 			mTableString = logSplitter(mTopString);
 			
 			int arListSize = mTableString.size();
-			Log.e("TAGGE", Integer.toString(arListSize));
+			//Log.e("TAGGE", Integer.toString(arListSize));
 			String[] firstColumns = new String[arListSize];
 			for(int i = 0; i < arListSize; i++)
 			{
 				firstColumns[i] = mTableString.get(0)[0];
 			}
-			Log.e("TAGGZE", Integer.toString(mTableString.size()));
-			TableLayout tableLayout = createTableLayout(mTableString.get(0), firstColumns, mTableString.size(), NUM_COLUMNS);
-			mHorizScrollView.addView(tableLayout);
-			mScrollView.addView(mHorizScrollView);
+			//Log.e("TAGGZE", Integer.toString(mTableString.size()));
+			//TableLayout tableLayout = createTableLayout(mTableString.get(0), firstColumns, mTableString.size(), NUM_COLUMNS);
+			//mHorizScrollView.addView(tableLayout);
+			//mScrollView.addView(mHorizScrollView);
 
 			mFragmentText.setText(mTopString);
 		}
@@ -187,25 +175,22 @@ public class MiscFragment extends Fragment {
 
 			for(int i = 0; i < splitLog.length; i++)
 			{
-				Log.e("TEST", splitLog[i]);
+				//Log.e("TEST", splitLog[i]);
 
 				if(splitLog[i].equals("PID"))
 				{
 					headerFlag = true;
-					Log.e("TAGGEH", "PID");
 				}
 
 				if(!headerFlag)
 				{
 					mHeaderString = mHeaderString + splitLog[i];
-					Log.e("TAGGEZ", "HEAD");
 				}
 				else
 				{
 					Log.e("TAGGET", Integer.toString(j));
 					if(j == 10)
 					{
-						Log.e("TAGGED", "ROW");
 						finalArray.add(row);
 						row = new String[NUM_COLUMNS];
 						j = 0;
