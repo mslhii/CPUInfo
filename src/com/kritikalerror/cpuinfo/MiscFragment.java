@@ -37,8 +37,6 @@ public class MiscFragment extends Fragment {
 	private String mTopString;
 	private String mHeaderString;
 	private ArrayList<String[]> mTableString;
-	private ScrollView mScrollView;
-	private HorizontalScrollView mHorizScrollView;
 
 	final private int NUM_COLUMNS = 10;
 
@@ -64,8 +62,6 @@ public class MiscFragment extends Fragment {
 
 		});
 
-		mScrollView = new ScrollView(mContext);
-		mHorizScrollView = new HorizontalScrollView(mContext);
 		mFragmentText = (TextView) rootView.findViewById(R.id.tops);
 		mFragmentText.setMovementMethod(new ScrollingMovementMethod());
 		if (mTopString.equals(""))
@@ -73,40 +69,7 @@ public class MiscFragment extends Fragment {
 			new CollectLogTask().execute(new ArrayList<String>());
 		}
 
-		((ViewGroup) rootView).addView(mScrollView);
 		return rootView;
-	}
-
-	private TableLayout createTableLayout(String[] rv, String[] cv,int rowCount, int columnCount) {
-		TableLayout.LayoutParams tableLayoutParams = new TableLayout.LayoutParams();
-		TableLayout tableLayout = new TableLayout(mContext);
-		tableLayout.setBackgroundColor(Color.BLACK);
-
-		TableRow.LayoutParams tableRowParams = new TableRow.LayoutParams();
-		tableRowParams.setMargins(1, 1, 1, 1);
-		tableRowParams.weight = 1;
-		
-		String[] tempRow;
-
-		for (int i = 0; i < rowCount; i++) {
-			TableRow tableRow = new TableRow(mContext);
-			tableRow.setBackgroundColor(Color.BLACK);
-			tempRow = mTableString.get(i);
-
-			for (int j= 0; j < columnCount; j++) {
-				TextView textView = new TextView(mContext);
-				textView.setBackgroundColor(Color.WHITE);
-				textView.setGravity(Gravity.CENTER);
-				textView.setText(tempRow[j]);
-				Log.e("TEST", tempRow[j]);
-
-				tableRow.addView(textView, tableRowParams);
-			}
-
-			tableLayout.addView(tableRow, tableLayoutParams);
-		}
-
-		return tableLayout;
 	}
 
 	private class CollectLogTask extends AsyncTask<ArrayList<String>, Void, StringBuilder>{
@@ -151,16 +114,11 @@ public class MiscFragment extends Fragment {
 			mTableString = logSplitter(mTopString);
 			
 			int arListSize = mTableString.size();
-			//Log.e("TAGGE", Integer.toString(arListSize));
 			String[] firstColumns = new String[arListSize];
 			for(int i = 0; i < arListSize; i++)
 			{
 				firstColumns[i] = mTableString.get(0)[0];
 			}
-			//Log.e("TAGGZE", Integer.toString(mTableString.size()));
-			//TableLayout tableLayout = createTableLayout(mTableString.get(0), firstColumns, mTableString.size(), NUM_COLUMNS);
-			//mHorizScrollView.addView(tableLayout);
-			//mScrollView.addView(mHorizScrollView);
 
 			mFragmentText.setText(mTopString);
 		}
