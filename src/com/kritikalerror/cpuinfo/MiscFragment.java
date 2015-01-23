@@ -87,6 +87,7 @@ public class MiscFragment extends Fragment {
 			try{
 				ArrayList<String> commandLine = new ArrayList<String>();
 				commandLine.add("top");
+				//commandLine.add("-b");
 				commandLine.add("-n");
 				commandLine.add("1");
 
