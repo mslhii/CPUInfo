@@ -87,12 +87,12 @@ public class MiscFragment extends Fragment {
 			try{
 				ArrayList<String> commandLine = new ArrayList<String>();
 				commandLine.add("top");
-				commandLine.add("-b");
+				//commandLine.add("-b");
 				commandLine.add("-n");
 				commandLine.add("1");
-				commandLine.add(">");
-				commandLine.add("output.txt");
-
+				//commandLine.add(">");
+				//commandLine.add("output.txt");
+				
 				Process process = Runtime.getRuntime().exec(commandLine.toArray(new String[0]));
 				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
