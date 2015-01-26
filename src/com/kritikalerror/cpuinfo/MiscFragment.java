@@ -1,6 +1,8 @@
 package com.kritikalerror.cpuinfo;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -64,6 +67,8 @@ public class MiscFragment extends Fragment {
 
 		mFragmentText = (TextView) rootView.findViewById(R.id.tops);
 		mFragmentText.setMovementMethod(new ScrollingMovementMethod());
+		mFragmentText.setHorizontallyScrolling(true);
+		mFragmentText.setTypeface(Typeface.MONOSPACE);
 		if (mTopString.equals(""))
 		{
 			new CollectLogTask().execute(new ArrayList<String>());
@@ -84,23 +89,44 @@ public class MiscFragment extends Fragment {
 		@Override
 		protected StringBuilder doInBackground(ArrayList<String>... params){
 			final StringBuilder log = new StringBuilder();
+			//File outputDir = mContext.getCacheDir();
+			//File file = new File(outputDir, "output.txt");
 			try{
 				ArrayList<String> commandLine = new ArrayList<String>();
 				commandLine.add("top");
-				//commandLine.add("-b");
 				commandLine.add("-n");
 				commandLine.add("1");
+				//commandLine.add("|");
+				//commandLine.add("awk");
+				//commandLine.add("'{print $1,$2,$9,$NF}'");
 				//commandLine.add(">");
-				//commandLine.add("output.txt");
+				//commandLine.add(file.getAbsolutePath().toString());
+				
 				
 				Process process = Runtime.getRuntime().exec(commandLine.toArray(new String[0]));
 				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
 				String line;
 				while ((line = bufferedReader.readLine()) != null){ 
+					line = line.replaceAll(" ", "\t");
 					log.append(line);
 					log.append("\n"); 
 				}
+				
+				/*
+				Process process = Runtime.getRuntime().exec(commandLine.toArray(new String[0]));
+				BufferedReader br = new BufferedReader(new FileReader(file));
+			    try {
+			        String line;
+
+			        while ((line = br.readLine()) != null){ 
+			            log.append(line);
+			            log.append("\n");
+			        }
+			    } finally {
+			        br.close();
+			    }
+			    */
 			} 
 			catch (IOException e){
 				Log.e("CPU INFO", "Getting top failed", e);
