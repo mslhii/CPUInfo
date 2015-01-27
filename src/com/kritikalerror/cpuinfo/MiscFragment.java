@@ -17,6 +17,8 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -40,6 +42,8 @@ public class MiscFragment extends Fragment {
 	private String mTopString;
 	private String mHeaderString;
 	private ArrayList<String[]> mTableString;
+	private Thread mCollectLogThread;
+	private boolean mPauseFlag = false;
 
 	final private int NUM_COLUMNS = 10;
 
@@ -52,6 +56,7 @@ public class MiscFragment extends Fragment {
 		mHeaderString = "";
 		mTopString = "";
 		mTableString = new ArrayList<String[]>();
+		mCollectLogThread = new Thread(new CollectLogRunnable());
 
 		Button pauseButton = (Button) rootView.findViewById(R.id.pause);
 		pauseButton.setOnClickListener(new View.OnClickListener() {
@@ -59,8 +64,19 @@ public class MiscFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Toast.makeText(mContext, "Refreshing...", Toast.LENGTH_SHORT).show();
-				new CollectLogTask().execute(new ArrayList<String>());
+				//new CollectLogTask().execute(new ArrayList<String>());
+				if(!mPauseFlag)
+				{
+					Toast.makeText(mContext, "Pausing...", Toast.LENGTH_SHORT).show();
+					mPauseFlag = true;
+				}
+				else
+				{
+					Toast.makeText(mContext, "Starting...", Toast.LENGTH_SHORT).show();
+					mPauseFlag = false;
+					mCollectLogThread = new Thread(new CollectLogRunnable());
+					mCollectLogThread.start();
+				}
 			}
 
 		});
@@ -71,10 +87,80 @@ public class MiscFragment extends Fragment {
 		mFragmentText.setTypeface(Typeface.MONOSPACE);
 		if (mTopString.equals(""))
 		{
-			new CollectLogTask().execute(new ArrayList<String>());
+			//new CollectLogTask().execute(new ArrayList<String>());
+			mCollectLogThread.start();
 		}
 
 		return rootView;
+	}
+	
+	private class CollectLogRunnable implements Runnable {
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			if (mTopString.equals(""))
+			{
+				//mFragmentText.setText("Running top command...");
+				threadMessage("Running top command...");
+			}
+			
+			final StringBuilder log = new StringBuilder();
+			int i = 0;
+			while(!mPauseFlag)
+			{
+				try
+				{
+					ArrayList<String> commandLine = new ArrayList<String>();
+					commandLine.add("top");
+					commandLine.add("-n");
+					commandLine.add("1");
+					
+					Process process = Runtime.getRuntime().exec(commandLine.toArray(new String[0]));
+					BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+	
+					String line;
+					while ((line = bufferedReader.readLine()) != null){ 
+						line = line.replaceAll(" ", "\t");
+						log.append(line);
+						log.append("\n"); 
+					}
+					
+					threadMessage(Integer.toString(i) + "\n" + log.toString());
+					
+					Thread.sleep(1000);
+					
+					log.setLength(0);
+					
+					Log.e("TESTA", "Ran " + i + " iterations of top with " + log.capacity() + " capacity.");
+					i++;
+				} 
+				catch (IOException e){
+					Log.e("CPU INFO", "Getting top failed", e);
+					//mFragmentText.setText("Cannot run top");
+					threadMessage("Cannot run top");
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		private void threadMessage(String message) {
+            if (!message.equals(null) && !message.equals("")) {
+                Message messageObj = handler.obtainMessage();
+                Bundle bundle = new Bundle();
+                bundle.putString("message", message);
+                messageObj.setData(bundle);
+                handler.sendMessage(messageObj);
+            }
+        }
+		
+		private final Handler handler = new Handler() {
+			public void handleMessage(Message message) {
+				mFragmentText.setText(message.getData().getString("message"));
+			}
+		};
 	}
 
 	private class CollectLogTask extends AsyncTask<ArrayList<String>, Void, StringBuilder>{
