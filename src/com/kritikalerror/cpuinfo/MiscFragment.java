@@ -175,19 +175,11 @@ public class MiscFragment extends Fragment {
 		@Override
 		protected StringBuilder doInBackground(ArrayList<String>... params){
 			final StringBuilder log = new StringBuilder();
-			//File outputDir = mContext.getCacheDir();
-			//File file = new File(outputDir, "output.txt");
 			try{
 				ArrayList<String> commandLine = new ArrayList<String>();
 				commandLine.add("top");
 				commandLine.add("-n");
 				commandLine.add("1");
-				//commandLine.add("|");
-				//commandLine.add("awk");
-				//commandLine.add("'{print $1,$2,$9,$NF}'");
-				//commandLine.add(">");
-				//commandLine.add(file.getAbsolutePath().toString());
-				
 				
 				Process process = Runtime.getRuntime().exec(commandLine.toArray(new String[0]));
 				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -198,21 +190,6 @@ public class MiscFragment extends Fragment {
 					log.append(line);
 					log.append("\n"); 
 				}
-				
-				/*
-				Process process = Runtime.getRuntime().exec(commandLine.toArray(new String[0]));
-				BufferedReader br = new BufferedReader(new FileReader(file));
-			    try {
-			        String line;
-
-			        while ((line = br.readLine()) != null){ 
-			            log.append(line);
-			            log.append("\n");
-			        }
-			    } finally {
-			        br.close();
-			    }
-			    */
 			} 
 			catch (IOException e){
 				Log.e("CPU INFO", "Getting top failed", e);
@@ -248,8 +225,6 @@ public class MiscFragment extends Fragment {
 
 			for(int i = 0; i < splitLog.length; i++)
 			{
-				//Log.e("TEST", splitLog[i]);
-
 				if(splitLog[i].equals("PID"))
 				{
 					headerFlag = true;
