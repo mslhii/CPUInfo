@@ -64,7 +64,6 @@ public class MiscFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				//new CollectLogTask().execute(new ArrayList<String>());
 				if(!mPauseFlag)
 				{
 					Toast.makeText(mContext, "Pausing...", Toast.LENGTH_SHORT).show();
@@ -87,11 +86,17 @@ public class MiscFragment extends Fragment {
 		mFragmentText.setTypeface(Typeface.MONOSPACE);
 		if (mTopString.equals(""))
 		{
-			//new CollectLogTask().execute(new ArrayList<String>());
 			mCollectLogThread.start();
 		}
 
 		return rootView;
+	}
+	
+	@Override
+	public void onPause()
+	{
+		//TODO: dont make deprecated
+		mCollectLogThread.stop();
 	}
 	
 	private class CollectLogRunnable implements Runnable {
@@ -101,7 +106,6 @@ public class MiscFragment extends Fragment {
 			// TODO Auto-generated method stub
 			if (mTopString.equals(""))
 			{
-				//mFragmentText.setText("Running top command...");
 				threadMessage("Running top command...");
 			}
 			
@@ -132,12 +136,11 @@ public class MiscFragment extends Fragment {
 					
 					log.setLength(0);
 					
-					Log.e("TESTA", "Ran " + i + " iterations of top with " + log.capacity() + " capacity.");
+					Log.e("TOP", "Ran " + i + " iterations of top with " + log.capacity() + " capacity.");
 					i++;
 				} 
 				catch (IOException e){
 					Log.e("CPU INFO", "Getting top failed", e);
-					//mFragmentText.setText("Cannot run top");
 					threadMessage("Cannot run top");
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
@@ -162,94 +165,14 @@ public class MiscFragment extends Fragment {
 			}
 		};
 	}
-
-	private class CollectLogTask extends AsyncTask<ArrayList<String>, Void, StringBuilder>{
-		@Override
-		protected void onPreExecute(){
-			if (mTopString.equals(""))
-			{
-				mFragmentText.setText("Running top command...");
-			}
-		}
-
-		@Override
-		protected StringBuilder doInBackground(ArrayList<String>... params){
-			final StringBuilder log = new StringBuilder();
-			try{
-				ArrayList<String> commandLine = new ArrayList<String>();
-				commandLine.add("top");
-				commandLine.add("-n");
-				commandLine.add("1");
-				
-				Process process = Runtime.getRuntime().exec(commandLine.toArray(new String[0]));
-				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
-				String line;
-				while ((line = bufferedReader.readLine()) != null){ 
-					line = line.replaceAll(" ", "\t");
-					log.append(line);
-					log.append("\n"); 
-				}
-			} 
-			catch (IOException e){
-				Log.e("CPU INFO", "Getting top failed", e);
-				mFragmentText.setText("Cannot run top");
-			} 
-
-			return log;
-		}
-
-		@Override
-		protected void onPostExecute(StringBuilder log){
-			mTopString = log.toString();
-
-			mTableString = logSplitter(mTopString);
-			
-			int arListSize = mTableString.size();
-			String[] firstColumns = new String[arListSize];
-			for(int i = 0; i < arListSize; i++)
-			{
-				firstColumns[i] = mTableString.get(0)[0];
-			}
-
-			mFragmentText.setText(mTopString);
-		}
-
-		private ArrayList<String[]> logSplitter(String log)
-		{
-			ArrayList<String[]> finalArray = new ArrayList<String[]>();
-			String[] splitLog = log.split(" ");
-			boolean headerFlag = false;
-			String[] row = new String[NUM_COLUMNS];
-			int j = 0;
-
-			for(int i = 0; i < splitLog.length; i++)
-			{
-				if(splitLog[i].equals("PID"))
-				{
-					headerFlag = true;
-				}
-
-				if(!headerFlag)
-				{
-					mHeaderString = mHeaderString + splitLog[i];
-				}
-				else
-				{
-					Log.e("TAGGET", Integer.toString(j));
-					if(j == 10)
-					{
-						finalArray.add(row);
-						row = new String[NUM_COLUMNS];
-						j = 0;
-					}
-					row[j] = splitLog[i];
-
-					j++;
-				}
-			}
-
-			return finalArray;
-		}
-	}
 }
+
+/*
+ * "Usage: %s [ -m max_procs ] [ -n iterations ] [ -d delay ] [ -s sort_column ] [ -t ] [ -h ]\n"
+567                    "    -m num  Maximum number of processes to display.\n"
+568                    "    -n num  Updates to show before exiting.\n"
+569                    "    -d num  Seconds to wait between updates.\n"
+570                    "    -s col  Column to sort by (cpu,vss,rss,thr).\n"
+571                    "    -t      Show threads instead of processes.\n"
+572                    "    -h      Display this help screen.\n",
+*/

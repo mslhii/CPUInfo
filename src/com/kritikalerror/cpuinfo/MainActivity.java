@@ -1,5 +1,7 @@
 package com.kritikalerror.cpuinfo;
 
+import java.lang.reflect.Method;
+
 import com.kritikalerror.cpuinfo.adapter.TabsAdapter;
 
 import com.example.cpuinfo.R;
@@ -8,10 +10,12 @@ import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 
 @SuppressLint("NewApi")
 public class MainActivity extends FragmentActivity implements
@@ -35,6 +39,7 @@ public class MainActivity extends FragmentActivity implements
 
 		viewPager.setAdapter(mAdapter);
 		actionBar.setHomeButtonEnabled(false);
+		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);		
 
 		// Adding Tabs
@@ -60,6 +65,8 @@ public class MainActivity extends FragmentActivity implements
 			public void onPageScrollStateChanged(int arg0) {
 			}
 		});
+		
+		forceTabs();
 	}
 
 	@Override
@@ -69,13 +76,30 @@ public class MainActivity extends FragmentActivity implements
 	@SuppressLint("NewApi")
 	@Override
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
-		// on tab selected
-		// show respected fragment view
 		viewPager.setCurrentItem(tab.getPosition());
 	}
 
 	@Override
 	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 	}
+	
+	@Override
+    public void onConfigurationChanged(final Configuration config) {
+        super.onConfigurationChanged(config);
+        forceTabs();
+    }
+
+    public void forceTabs() {
+        try {
+            final ActionBar actionBar = getActionBar();
+            final Method setHasEmbeddedTabsMethod = actionBar.getClass()
+                .getDeclaredMethod("setHasEmbeddedTabs", boolean.class);
+            setHasEmbeddedTabsMethod.setAccessible(true);
+            setHasEmbeddedTabsMethod.invoke(actionBar, true);
+        }
+        catch(final Exception e) {
+        	Log.e("MAIN", "tabs");
+        }
+    }
 
 }
