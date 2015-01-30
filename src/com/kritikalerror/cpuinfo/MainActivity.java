@@ -25,7 +25,7 @@ public class MainActivity extends FragmentActivity implements
 	private TabsAdapter mAdapter;
 	private ActionBar actionBar;
 	// Tab titles
-	private String[] tabs = { "CPU Info", "Process List" };
+	private String[] tabs = { "CPU", "Processes" };
 
 	@SuppressLint("NewApi")
 	@Override
