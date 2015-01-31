@@ -58,7 +58,7 @@ public class MiscFragment extends Fragment {
 		mTableString = new ArrayList<String[]>();
 		mCollectLogThread = new Thread(new CollectLogRunnable());
 
-		Button pauseButton = (Button) rootView.findViewById(R.id.pause);
+		final Button pauseButton = (Button) rootView.findViewById(R.id.pause);
 		pauseButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -68,6 +68,7 @@ public class MiscFragment extends Fragment {
 				{
 					Toast.makeText(mContext, "Pausing...", Toast.LENGTH_SHORT).show();
 					mPauseFlag = true;
+					pauseButton.setText("Start");
 				}
 				else
 				{
@@ -75,6 +76,7 @@ public class MiscFragment extends Fragment {
 					mPauseFlag = false;
 					mCollectLogThread = new Thread(new CollectLogRunnable());
 					mCollectLogThread.start();
+					pauseButton.setText("Pause");
 				}
 			}
 
@@ -95,8 +97,8 @@ public class MiscFragment extends Fragment {
 	@Override
 	public void onPause()
 	{
-		//TODO: dont make deprecated
-		mCollectLogThread.stop();
+		super.onPause();
+		mPauseFlag = true;
 	}
 	
 	private class CollectLogRunnable implements Runnable {
@@ -147,6 +149,8 @@ public class MiscFragment extends Fragment {
 					e.printStackTrace();
 				}
 			}
+			
+			Log.e("TOP", "Thread finished!");
 		}
 		
 		private void threadMessage(String message) {

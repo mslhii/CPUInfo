@@ -10,12 +10,15 @@ import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 @SuppressLint("NewApi")
 public class MainActivity extends FragmentActivity implements
@@ -88,6 +91,23 @@ public class MainActivity extends FragmentActivity implements
         super.onConfigurationChanged(config);
         forceTabs();
     }
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(0, 0, 0, "Settings");
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case 0:
+			Intent myIntent = new Intent(this, SettingsActivity.class);
+			startActivity(myIntent);
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 
     public void forceTabs() {
         try {
