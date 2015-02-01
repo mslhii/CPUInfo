@@ -11,14 +11,17 @@ import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 @SuppressLint("NewApi")
 public class MainActivity extends FragmentActivity implements
@@ -27,9 +30,17 @@ public class MainActivity extends FragmentActivity implements
 	private ViewPager viewPager;
 	private TabsAdapter mAdapter;
 	private ActionBar actionBar;
+	
+	public String mMaxProcesses = "Disabled";
+	public String mRefreshFreq = "1";
+	public boolean mShowThreads = false;
+	public String mSortColumns = "None";
+	
 	// Tab titles
 	private String[] tabs = { "CPU", "Processes" };
-
+	
+	private final int RESULT = 1;
+	
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -103,11 +114,36 @@ public class MainActivity extends FragmentActivity implements
 		switch (item.getItemId()) {
 		case 0:
 			Intent myIntent = new Intent(this, SettingsActivity.class);
-			startActivity(myIntent);
+			startActivityForResult(myIntent, RESULT);
 			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	@Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) 
+        {
+        case RESULT:
+        	SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        	
+        	mMaxProcesses = sharedPrefs.getString("maxProcesses", "NULL");
+        	mRefreshFreq = sharedPrefs.getString("refreshFrequency", "NULL");
+        	mShowThreads = sharedPrefs.getBoolean("Threads", false);
+        	mSortColumns = sharedPrefs.getString("columns", "NULL");
+        	
+        	String testString = "true";
+        	if(!mShowThreads)
+        	{
+        		testString = "false";
+        	}
+        	
+        	Toast.makeText(this, "Settings is: " + mMaxProcesses + " " +
+        			mRefreshFreq + " " + testString + " " + mSortColumns, Toast.LENGTH_SHORT).show();
+            break;
+        }
+    }
 
     public void forceTabs() {
         try {

@@ -57,7 +57,7 @@ public class MiscFragment extends Fragment {
 		mTopString = "";
 		mTableString = new ArrayList<String[]>();
 		mCollectLogThread = new Thread(new CollectLogRunnable());
-
+		
 		final Button pauseButton = (Button) rootView.findViewById(R.id.pause);
 		pauseButton.setOnClickListener(new View.OnClickListener() {
 
