@@ -126,18 +126,30 @@ public class MainActivity extends FragmentActivity implements
         switch (requestCode) 
         {
         case RESULT:
+        	//PreferenceManager.setDefaultValues(this, R.xml.settings, false);
         	SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         	
-        	mMaxProcesses = sharedPrefs.getString("maxProcesses", "NULL");
-        	mRefreshFreq = sharedPrefs.getString("refreshFrequency", "NULL");
-        	mShowThreads = sharedPrefs.getBoolean("Threads", false);
-        	mSortColumns = sharedPrefs.getString("columns", "NULL");
+        	mMaxProcesses = sharedPrefs.getString("maxProcesses", "Disabled");
+        	mRefreshFreq = sharedPrefs.getString("refreshFrequency", "1");
+        	mShowThreads = sharedPrefs.getBoolean("threads", false);
+        	mSortColumns = sharedPrefs.getString("columns", "None");
         	
         	String testString = "true";
         	if(!mShowThreads)
         	{
         		testString = "false";
         	}
+        	
+        	/*
+        	// Send data to MiscFragment
+        	Bundle bundle = new Bundle();
+        	bundle.putString("maxProcesses", mMaxProcesses);
+        	bundle.putString("refreshFreq", mRefreshFreq);
+        	bundle.putString("showThreads", testString);
+        	bundle.putString("sortColumns", mSortColumns);
+        	MiscFragment miscFragment = new MiscFragment();
+        	miscFragment.setArguments(bundle);
+        	*/
         	
         	Toast.makeText(this, "Settings is: " + mMaxProcesses + " " +
         			mRefreshFreq + " " + testString + " " + mSortColumns, Toast.LENGTH_SHORT).show();

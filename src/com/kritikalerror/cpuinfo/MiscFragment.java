@@ -19,6 +19,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -44,6 +45,11 @@ public class MiscFragment extends Fragment {
 	private ArrayList<String[]> mTableString;
 	private Thread mCollectLogThread;
 	private boolean mPauseFlag = false;
+	
+	private String mMaxProcesses;
+	private String mRefreshFreq;
+	private boolean mShowThreads;
+	private String mSortColumns;
 
 	final private int NUM_COLUMNS = 10;
 
@@ -74,6 +80,7 @@ public class MiscFragment extends Fragment {
 				{
 					Toast.makeText(mContext, "Starting...", Toast.LENGTH_SHORT).show();
 					mPauseFlag = false;
+					prepareParams();
 					mCollectLogThread = new Thread(new CollectLogRunnable());
 					mCollectLogThread.start();
 					pauseButton.setText("Pause");
@@ -81,6 +88,13 @@ public class MiscFragment extends Fragment {
 			}
 
 		});
+		
+		/*
+		mMaxProcesses = this.getArguments().getString("maxProcesses");
+		mRefreshFreq = this.getArguments().getString("refreshFreq");
+		mShowThreads = this.getArguments().getString("showThreads");
+		mSortColumns = this.getArguments().getString("sortColumns");
+		*/
 
 		mFragmentText = (TextView) rootView.findViewById(R.id.tops);
 		mFragmentText.setMovementMethod(new ScrollingMovementMethod());
@@ -88,6 +102,7 @@ public class MiscFragment extends Fragment {
 		mFragmentText.setTypeface(Typeface.MONOSPACE);
 		if (mTopString.equals(""))
 		{
+			prepareParams();
 			mCollectLogThread.start();
 		}
 
@@ -122,6 +137,46 @@ public class MiscFragment extends Fragment {
 					commandLine.add("-n");
 					commandLine.add("1");
 					
+					/*
+					// Add params here
+					if(!mMaxProcesses.equals("Disabled") && mMaxProcesses != null)
+					{
+						commandLine.add("-m");
+						commandLine.add(mMaxProcesses);
+					}
+					if(!mRefreshFreq.equals("1") && mRefreshFreq != null)
+					{
+						commandLine.add("-d");
+						commandLine.add(mRefreshFreq);
+					}
+					if(!mShowThreads.equals("false") && mShowThreads != null)
+					{
+						commandLine.add("-t");
+					}
+					if(!mSortColumns.equals("default") && mSortColumns != null)
+					{
+						commandLine.add("-s");
+						commandLine.add(mSortColumns);
+					}
+					*/
+					if(!mMaxProcesses.equals("Disabled") && mMaxProcesses != null)
+					{
+						commandLine.add("-m");
+						commandLine.add(mMaxProcesses);
+						Log.e("TOP", "Processing!");
+					}
+					if(mShowThreads)
+					{
+						commandLine.add("-t");
+						Log.e("TOP", "Threading!");
+					}
+					if(!mSortColumns.equals("Default") && mSortColumns != null)
+					{
+						commandLine.add("-s");
+						commandLine.add(mSortColumns);
+						Log.e("TOP", "Sorting!");
+					}
+					
 					Process process = Runtime.getRuntime().exec(commandLine.toArray(new String[0]));
 					BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 	
@@ -134,7 +189,16 @@ public class MiscFragment extends Fragment {
 					
 					threadMessage(Integer.toString(i) + "\n" + log.toString());
 					
-					Thread.sleep(1000);
+					if(!mRefreshFreq.equals("1") && mRefreshFreq != null)
+					{
+						int refreshTime = Integer.valueOf(mRefreshFreq);
+						Thread.sleep(refreshTime * 1000);
+						Log.e("TOP", "Counting!");
+					}
+					else
+					{
+						Thread.sleep(1000);
+					}
 					
 					log.setLength(0);
 					
@@ -168,6 +232,25 @@ public class MiscFragment extends Fragment {
 				mFragmentText.setText(message.getData().getString("message"));
 			}
 		};
+	}
+	
+	private void prepareParams()
+	{
+		// Get settings params
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+		mMaxProcesses = sharedPrefs.getString("maxProcesses", "Disabled");
+		mRefreshFreq = sharedPrefs.getString("refreshFrequency", "1");
+		mShowThreads = sharedPrefs.getBoolean("threads", false);
+		mSortColumns = sharedPrefs.getString("columns", "None");
+		
+		String testString = "true";
+    	if(!mShowThreads)
+    	{
+    		testString = "false";
+    	}
+		
+		Toast.makeText(mContext, "Settings is: " + mMaxProcesses + " " +
+    			mRefreshFreq + " " + testString + " " + mSortColumns, Toast.LENGTH_SHORT).show();
 	}
 }
 
