@@ -5,6 +5,12 @@ import java.lang.reflect.Method;
 import com.kritikalerror.cpuinfo.adapter.TabsAdapter;
 
 import com.example.cpuinfo.R;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
@@ -21,6 +27,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 @SuppressLint("NewApi")
@@ -126,7 +133,6 @@ public class MainActivity extends FragmentActivity implements
         switch (requestCode) 
         {
         case RESULT:
-        	//PreferenceManager.setDefaultValues(this, R.xml.settings, false);
         	SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         	
         	mMaxProcesses = sharedPrefs.getString("maxProcesses", "Disabled");
@@ -139,17 +145,6 @@ public class MainActivity extends FragmentActivity implements
         	{
         		testString = "false";
         	}
-        	
-        	/*
-        	// Send data to MiscFragment
-        	Bundle bundle = new Bundle();
-        	bundle.putString("maxProcesses", mMaxProcesses);
-        	bundle.putString("refreshFreq", mRefreshFreq);
-        	bundle.putString("showThreads", testString);
-        	bundle.putString("sortColumns", mSortColumns);
-        	MiscFragment miscFragment = new MiscFragment();
-        	miscFragment.setArguments(bundle);
-        	*/
         	
         	Toast.makeText(this, "Settings is: " + mMaxProcesses + " " +
         			mRefreshFreq + " " + testString + " " + mSortColumns, Toast.LENGTH_SHORT).show();
@@ -169,5 +164,30 @@ public class MainActivity extends FragmentActivity implements
         	Log.e("MAIN", "tabs");
         }
     }
+    /*
+    private void loadAds()
+	{
+		// Create and setup the AdMob view
+		mAdView = new AdView(this);
+		FrameLayout layout = (FrameLayout) findViewById(R.id.pager);
 
+		mAdView.setAdSize(AdSize.SMART_BANNER);
+		mAdView.setAdUnitId("ca-app-pub-6309606968767978/4023310042");
+		AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
+		
+		// Get the height for offset calculations
+		AdSize adSize = mAdView.getAdSize();
+		//mAdHeight = adSize.getHeight();
+		mAdHeight = adSize.getHeightInPixels(getApplicationContext());
+		
+		// Add the AdMob view
+		FrameLayout.LayoutParams adParams = 
+				new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, 
+						FrameLayout.LayoutParams.WRAP_CONTENT);
+
+		layout.addView(mAdView, adParams);
+
+		mAdView.loadAd(adRequestBuilder.build());
+	}
+	*/
 }

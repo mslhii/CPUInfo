@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import com.example.cpuinfo.R;
+import com.google.android.gms.ads.AdView;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -28,21 +29,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+
 public class MiscFragment extends Fragment {
 
 	public TextView mFragmentText;
 	protected Context mContext;
 	private String mTopString;
-	private String mHeaderString;
-	private ArrayList<String[]> mTableString;
 	private Thread mCollectLogThread;
 	private boolean mPauseFlag = false;
 	
@@ -50,8 +55,9 @@ public class MiscFragment extends Fragment {
 	private String mRefreshFreq;
 	private boolean mShowThreads;
 	private String mSortColumns;
-
-	final private int NUM_COLUMNS = 10;
+	
+	private AdView mAdView;
+	private int mAdHeight;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,9 +65,7 @@ public class MiscFragment extends Fragment {
 
 		View rootView = inflater.inflate(R.layout.fragment_processes, container, false);
 		mContext = rootView.getContext();
-		mHeaderString = "";
 		mTopString = "";
-		mTableString = new ArrayList<String[]>();
 		mCollectLogThread = new Thread(new CollectLogRunnable());
 		
 		final Button pauseButton = (Button) rootView.findViewById(R.id.pause);
@@ -88,13 +92,6 @@ public class MiscFragment extends Fragment {
 			}
 
 		});
-		
-		/*
-		mMaxProcesses = this.getArguments().getString("maxProcesses");
-		mRefreshFreq = this.getArguments().getString("refreshFreq");
-		mShowThreads = this.getArguments().getString("showThreads");
-		mSortColumns = this.getArguments().getString("sortColumns");
-		*/
 
 		mFragmentText = (TextView) rootView.findViewById(R.id.tops);
 		mFragmentText.setMovementMethod(new ScrollingMovementMethod());
@@ -105,6 +102,8 @@ public class MiscFragment extends Fragment {
 			prepareParams();
 			mCollectLogThread.start();
 		}
+		
+		loadAds((RelativeLayout) rootView.findViewById(R.id.topz));
 
 		return rootView;
 	}
@@ -137,28 +136,6 @@ public class MiscFragment extends Fragment {
 					commandLine.add("-n");
 					commandLine.add("1");
 					
-					/*
-					// Add params here
-					if(!mMaxProcesses.equals("Disabled") && mMaxProcesses != null)
-					{
-						commandLine.add("-m");
-						commandLine.add(mMaxProcesses);
-					}
-					if(!mRefreshFreq.equals("1") && mRefreshFreq != null)
-					{
-						commandLine.add("-d");
-						commandLine.add(mRefreshFreq);
-					}
-					if(!mShowThreads.equals("false") && mShowThreads != null)
-					{
-						commandLine.add("-t");
-					}
-					if(!mSortColumns.equals("default") && mSortColumns != null)
-					{
-						commandLine.add("-s");
-						commandLine.add(mSortColumns);
-					}
-					*/
 					if(!mMaxProcesses.equals("Disabled") && mMaxProcesses != null)
 					{
 						commandLine.add("-m");
@@ -251,6 +228,28 @@ public class MiscFragment extends Fragment {
 		
 		Toast.makeText(mContext, "Settings is: " + mMaxProcesses + " " +
     			mRefreshFreq + " " + testString + " " + mSortColumns, Toast.LENGTH_SHORT).show();
+	}
+	
+	private void loadAds(RelativeLayout layout)
+	{
+		// Create and setup the AdMob view
+		mAdView = new AdView(mContext);
+
+		mAdView.setAdSize(AdSize.SMART_BANNER);
+		mAdView.setAdUnitId("ca-app-pub-6309606968767978/4023310042");
+		AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
+		
+		// Get the height for offset calculations
+		AdSize adSize = mAdView.getAdSize();
+		
+		// Add the AdMob view
+		RelativeLayout.LayoutParams adParams = 
+				new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, 
+						RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+		layout.addView(mAdView, adParams);
+
+		mAdView.loadAd(adRequestBuilder.build());
 	}
 }
 
