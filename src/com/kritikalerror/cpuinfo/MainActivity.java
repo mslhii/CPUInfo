@@ -6,20 +6,13 @@ import com.kritikalerror.cpuinfo.adapter.TabsAdapter;
 
 import com.example.cpuinfo.R;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
-
-
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
@@ -27,7 +20,6 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 @SuppressLint("NewApi")
@@ -146,8 +138,8 @@ public class MainActivity extends FragmentActivity implements
         		testString = "false";
         	}
         	
-        	Toast.makeText(this, "Settings is: " + mMaxProcesses + " " +
-        			mRefreshFreq + " " + testString + " " + mSortColumns, Toast.LENGTH_SHORT).show();
+        	Log.e("MAIN", "Settings is: " + mMaxProcesses + " " +
+        			mRefreshFreq + " " + testString + " " + mSortColumns);
             break;
         }
     }
@@ -164,30 +156,4 @@ public class MainActivity extends FragmentActivity implements
         	Log.e("MAIN", "tabs");
         }
     }
-    /*
-    private void loadAds()
-	{
-		// Create and setup the AdMob view
-		mAdView = new AdView(this);
-		FrameLayout layout = (FrameLayout) findViewById(R.id.pager);
-
-		mAdView.setAdSize(AdSize.SMART_BANNER);
-		mAdView.setAdUnitId("ca-app-pub-6309606968767978/4023310042");
-		AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
-		
-		// Get the height for offset calculations
-		AdSize adSize = mAdView.getAdSize();
-		//mAdHeight = adSize.getHeight();
-		mAdHeight = adSize.getHeightInPixels(getApplicationContext());
-		
-		// Add the AdMob view
-		FrameLayout.LayoutParams adParams = 
-				new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, 
-						FrameLayout.LayoutParams.WRAP_CONTENT);
-
-		layout.addView(mAdView, adParams);
-
-		mAdView.loadAd(adRequestBuilder.build());
-	}
-	*/
 }

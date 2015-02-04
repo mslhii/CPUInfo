@@ -1,8 +1,6 @@
 package com.kritikalerror.cpuinfo;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -10,13 +8,10 @@ import java.util.ArrayList;
 import com.example.cpuinfo.R;
 import com.google.android.gms.ads.AdView;
 
-import android.app.ProgressDialog;
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,18 +19,11 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.HorizontalScrollView;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,7 +45,6 @@ public class MiscFragment extends Fragment {
 	private String mSortColumns;
 	
 	private AdView mAdView;
-	private int mAdHeight;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -117,6 +104,7 @@ public class MiscFragment extends Fragment {
 	
 	private class CollectLogRunnable implements Runnable {
 
+		@SuppressLint("DefaultLocale")
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
@@ -150,7 +138,7 @@ public class MiscFragment extends Fragment {
 					if(!mSortColumns.equals("Default") && mSortColumns != null)
 					{
 						commandLine.add("-s");
-						commandLine.add(mSortColumns);
+						commandLine.add(mSortColumns.toLowerCase());
 						Log.e("TOP", "Sorting!");
 					}
 					
@@ -226,8 +214,8 @@ public class MiscFragment extends Fragment {
     		testString = "false";
     	}
 		
-		Toast.makeText(mContext, "Settings is: " + mMaxProcesses + " " +
-    			mRefreshFreq + " " + testString + " " + mSortColumns, Toast.LENGTH_SHORT).show();
+    	Log.e("MAIN", "Settings is: " + mMaxProcesses + " " +
+    			mRefreshFreq + " " + testString + " " + mSortColumns);
 	}
 	
 	private void loadAds(RelativeLayout layout)
