@@ -10,6 +10,7 @@ import com.google.android.gms.ads.AdView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -20,6 +21,9 @@ import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -54,31 +58,6 @@ public class MiscFragment extends Fragment {
 		mContext = rootView.getContext();
 		mTopString = "";
 		mCollectLogThread = new Thread(new CollectLogRunnable());
-		
-		final Button pauseButton = (Button) rootView.findViewById(R.id.pause);
-		pauseButton.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				if(!mPauseFlag)
-				{
-					Toast.makeText(mContext, "Pausing...", Toast.LENGTH_SHORT).show();
-					mPauseFlag = true;
-					pauseButton.setText("Start");
-				}
-				else
-				{
-					Toast.makeText(mContext, "Starting...", Toast.LENGTH_SHORT).show();
-					mPauseFlag = false;
-					prepareParams();
-					mCollectLogThread = new Thread(new CollectLogRunnable());
-					mCollectLogThread.start();
-					pauseButton.setText("Pause");
-				}
-			}
-
-		});
 
 		mFragmentText = (TextView) rootView.findViewById(R.id.tops);
 		mFragmentText.setMovementMethod(new ScrollingMovementMethod());
@@ -91,6 +70,8 @@ public class MiscFragment extends Fragment {
 		}
 		
 		loadAds((RelativeLayout) rootView.findViewById(R.id.topz));
+		
+		setHasOptionsMenu(true);
 
 		return rootView;
 	}
@@ -100,6 +81,35 @@ public class MiscFragment extends Fragment {
 	{
 		super.onPause();
 		mPauseFlag = true;
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	    // TODO Add your menu entries here
+		menu.add(0, 1, 0, "Start/Stop");
+	    super.onCreateOptionsMenu(menu, inflater);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case 1:
+			if(!mPauseFlag)
+			{
+				Toast.makeText(mContext, "Stopping...", Toast.LENGTH_SHORT).show();
+				mPauseFlag = true;
+			}
+			else
+			{
+				Toast.makeText(mContext, "Starting...", Toast.LENGTH_SHORT).show();
+				mPauseFlag = false;
+				prepareParams();
+				mCollectLogThread = new Thread(new CollectLogRunnable());
+				mCollectLogThread.start();
+			}
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 	
 	private class CollectLogRunnable implements Runnable {
@@ -152,7 +162,7 @@ public class MiscFragment extends Fragment {
 						log.append("\n"); 
 					}
 					
-					threadMessage(Integer.toString(i) + "\n" + log.toString());
+					threadMessage("\n" + log.toString());
 					
 					if(!mRefreshFreq.equals("1") && mRefreshFreq != null)
 					{

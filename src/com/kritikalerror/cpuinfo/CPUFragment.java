@@ -6,7 +6,11 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import com.example.cpuinfo.R;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,23 +19,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class CPUFragment extends Fragment {
 	
 	public static final String TAG = null;
     public TextView tv;
+    
+    protected Context mContext;
+    private AdView mAdView;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
 		View rootView = inflater.inflate(R.layout.fragment_cpu, container, false);
+		mContext = rootView.getContext();
+		
+		loadAds((RelativeLayout) rootView.findViewById(R.id.cpu));
 		
 		// Display CPU Info in popup dialog
 		tv = (TextView) rootView.findViewById(R.id.tv);
 		tv.setMovementMethod(new ScrollingMovementMethod());
-    	tv.setText("CPU Info: \n" + getInfo());	
+    	tv.setText("\n\n\n\n" + "CPU Info: \n" + getInfo());	
 		
 		return rootView;
 	}
@@ -62,4 +73,26 @@ public class CPUFragment extends Fragment {
         }
         return sb.toString();
     }
+	
+	private void loadAds(RelativeLayout layout)
+	{
+		// Create and setup the AdMob view
+		mAdView = new AdView(mContext);
+
+		mAdView.setAdSize(AdSize.SMART_BANNER);
+		mAdView.setAdUnitId("ca-app-pub-6309606968767978/4023310042");
+		AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
+		
+		// Get the height for offset calculations
+		AdSize adSize = mAdView.getAdSize();
+		
+		// Add the AdMob view
+		RelativeLayout.LayoutParams adParams = 
+				new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, 
+						RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+		layout.addView(mAdView, adParams);
+
+		mAdView.loadAd(adRequestBuilder.build());
+	}
 }
