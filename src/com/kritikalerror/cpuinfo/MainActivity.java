@@ -130,7 +130,7 @@ public class MainActivity extends FragmentActivity implements
         	mMaxProcesses = sharedPrefs.getString("maxProcesses", "Disabled");
         	mRefreshFreq = sharedPrefs.getString("refreshFrequency", "1");
         	mShowThreads = sharedPrefs.getBoolean("threads", false);
-        	mSortColumns = sharedPrefs.getString("columns", "None");
+        	mSortColumns = sharedPrefs.getString("columns", "Default");
         	
         	String testString = "true";
         	if(!mShowThreads)

@@ -149,7 +149,7 @@ public class MiscFragment extends Fragment {
 					{
 						commandLine.add("-s");
 						commandLine.add(mSortColumns.toLowerCase());
-						Log.e("TOP", "Sorting!");
+						Log.e("TOP", "Sorting! " + mSortColumns);
 					}
 					
 					Process process = Runtime.getRuntime().exec(commandLine.toArray(new String[0]));
@@ -162,7 +162,17 @@ public class MiscFragment extends Fragment {
 						log.append("\n"); 
 					}
 					
-					threadMessage("\n" + log.toString());
+					String result = log.toString();
+					if((result.length() == 0) || (result == null))
+					{
+						threadMessage("Top cannot run!\n" +
+								"You may not have root access\n" +
+								"or top installed.");
+					}
+					else
+					{
+						threadMessage("\n" + result);
+					}
 					
 					if(!mRefreshFreq.equals("1") && mRefreshFreq != null)
 					{
@@ -216,7 +226,7 @@ public class MiscFragment extends Fragment {
 		mMaxProcesses = sharedPrefs.getString("maxProcesses", "Disabled");
 		mRefreshFreq = sharedPrefs.getString("refreshFrequency", "1");
 		mShowThreads = sharedPrefs.getBoolean("threads", false);
-		mSortColumns = sharedPrefs.getString("columns", "None");
+		mSortColumns = sharedPrefs.getString("columns", "Default");
 		
 		String testString = "true";
     	if(!mShowThreads)
