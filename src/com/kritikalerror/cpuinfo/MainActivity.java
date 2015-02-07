@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 
 import com.kritikalerror.cpuinfo.adapter.TabsAdapter;
 
-import com.example.cpuinfo.R;
+import com.kritikalerror.cpuinfo.R;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
@@ -20,7 +20,6 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 @SuppressLint("NewApi")
 public class MainActivity extends FragmentActivity implements

@@ -5,12 +5,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import com.example.cpuinfo.R;
+import com.kritikalerror.cpuinfo.R;
 import com.google.android.gms.ads.AdView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -26,7 +25,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -247,9 +245,6 @@ public class MiscFragment extends Fragment {
 		mAdView.setAdUnitId("ca-app-pub-6309606968767978/4023310042");
 		AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
 		
-		// Get the height for offset calculations
-		AdSize adSize = mAdView.getAdSize();
-		
 		// Add the AdMob view
 		RelativeLayout.LayoutParams adParams = 
 				new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, 
@@ -260,13 +255,3 @@ public class MiscFragment extends Fragment {
 		mAdView.loadAd(adRequestBuilder.build());
 	}
 }
-
-/*
- * "Usage: %s [ -m max_procs ] [ -n iterations ] [ -d delay ] [ -s sort_column ] [ -t ] [ -h ]\n"
-567                    "    -m num  Maximum number of processes to display.\n"
-568                    "    -n num  Updates to show before exiting.\n"
-569                    "    -d num  Seconds to wait between updates.\n"
-570                    "    -s col  Column to sort by (cpu,vss,rss,thr).\n"
-571                    "    -t      Show threads instead of processes.\n"
-572                    "    -h      Display this help screen.\n",
-*/

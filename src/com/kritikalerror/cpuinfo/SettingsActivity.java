@@ -1,6 +1,6 @@
 package com.kritikalerror.cpuinfo;
 
-import com.example.cpuinfo.R;
+import com.kritikalerror.cpuinfo.R;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;

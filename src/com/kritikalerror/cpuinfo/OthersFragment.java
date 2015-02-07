@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
-import com.example.cpuinfo.R;
+import com.kritikalerror.cpuinfo.R;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
