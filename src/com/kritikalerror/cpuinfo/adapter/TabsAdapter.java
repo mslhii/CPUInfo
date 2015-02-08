@@ -22,6 +22,8 @@ public class TabsAdapter extends FragmentPagerAdapter {
 			return new CPUFragment();
 		case 1:
 			return new MiscFragment();
+		case 2:
+			return new OthersFragment();
 		}
 
 		return null;
@@ -30,7 +32,7 @@ public class TabsAdapter extends FragmentPagerAdapter {
 	@Override
 	public int getCount() {
 		// get item count - equal to number of tabs
-		return 2;
+		return 3;
 	}
 
 }

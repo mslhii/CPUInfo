@@ -82,6 +82,16 @@ public class MiscFragment extends Fragment {
 	}
 	
 	@Override
+	public void onResume()
+	{
+		super.onResume();
+		mPauseFlag = false;
+		prepareParams();
+		mCollectLogThread = new Thread(new CollectLogRunnable());
+		mCollectLogThread.start();
+	}
+	
+	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 	    // TODO Add your menu entries here
 		menu.add(0, 1, 0, "Start/Stop");

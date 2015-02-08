@@ -35,7 +35,7 @@ public class MainActivity extends FragmentActivity implements
 	public String mSortColumns = "None";
 	
 	// Tab titles
-	private String[] tabs = { "CPU", "Processes" };
+	private String[] tabs = { "CPU", "Top", "PS" };
 	
 	private final int RESULT = 1;
 	
