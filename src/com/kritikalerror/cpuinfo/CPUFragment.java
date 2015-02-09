@@ -18,6 +18,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -28,6 +29,7 @@ public class CPUFragment extends Fragment {
     
     protected Context mContext;
     private AdView mAdView;
+    private LinearLayout mLayout;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,6 +38,7 @@ public class CPUFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_cpu, container, false);
 		mContext = rootView.getContext();
 		
+		mLayout = (LinearLayout) rootView.findViewById(R.id.llc);
 		loadAds((RelativeLayout) rootView.findViewById(R.id.cpu));
 		
 		// Display CPU Info in popup dialog
@@ -81,10 +84,7 @@ public class CPUFragment extends Fragment {
 		mAdView.setAdSize(AdSize.SMART_BANNER);
 		mAdView.setAdUnitId("ca-app-pub-6309606968767978/4023310042");
 		AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
-		
-		// Get the height for offset calculations
-		AdSize adSize = mAdView.getAdSize();
-		
+				
 		// Add the AdMob view
 		RelativeLayout.LayoutParams adParams = 
 				new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, 

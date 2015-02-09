@@ -25,6 +25,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,6 +47,7 @@ public class MiscFragment extends Fragment {
 	private boolean mShowThreads;
 	private String mSortColumns;
 	
+	private LinearLayout mLayout;
 	private AdView mAdView;
 
 	@Override
@@ -57,6 +59,7 @@ public class MiscFragment extends Fragment {
 		mTopString = "";
 		mCollectLogThread = new Thread(new CollectLogRunnable());
 
+		mLayout = (LinearLayout) rootView.findViewById(R.id.llt);
 		mFragmentText = (TextView) rootView.findViewById(R.id.tops);
 		mFragmentText.setMovementMethod(new ScrollingMovementMethod());
 		mFragmentText.setHorizontallyScrolling(true);
