@@ -3,7 +3,6 @@ package com.kritikalerror.cpuinfo;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
 import com.kritikalerror.cpuinfo.R;
@@ -11,7 +10,6 @@ import com.kritikalerror.cpuinfo.R;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
