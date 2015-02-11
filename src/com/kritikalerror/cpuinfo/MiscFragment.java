@@ -47,7 +47,7 @@ public class MiscFragment extends Fragment {
 	private boolean mShowThreads;
 	private String mSortColumns;
 	
-	private LinearLayout mLayout;
+	private RelativeLayout mLayout;
 	private AdView mAdView;
 
 	@Override
@@ -59,7 +59,7 @@ public class MiscFragment extends Fragment {
 		mTopString = "";
 		mCollectLogThread = new Thread(new CollectLogRunnable());
 
-		mLayout = (LinearLayout) rootView.findViewById(R.id.llt);
+		mLayout = (RelativeLayout) rootView.findViewById(R.id.llt);
 		mFragmentText = (TextView) rootView.findViewById(R.id.tops);
 		mFragmentText.setMovementMethod(new ScrollingMovementMethod());
 		mFragmentText.setHorizontallyScrolling(true);
@@ -182,7 +182,7 @@ public class MiscFragment extends Fragment {
 					}
 					else
 					{
-						threadMessage("\n" + result);
+						threadMessage("\n\n\n" + result);
 					}
 					
 					if(!mRefreshFreq.equals("1") && mRefreshFreq != null)
