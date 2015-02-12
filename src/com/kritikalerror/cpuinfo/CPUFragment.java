@@ -44,7 +44,7 @@ public class CPUFragment extends Fragment {
 		// Display CPU Info in popup dialog
 		tv = (TextView) rootView.findViewById(R.id.tv);
 		tv.setMovementMethod(new ScrollingMovementMethod());
-    	tv.setText("\n\n\n\n" + "CPU Info: \n" + getInfo());	
+    	tv.setText("\n\n\n\n\n" + "CPU Info: \n" + getInfo());	
 		
 		return rootView;
 	}
