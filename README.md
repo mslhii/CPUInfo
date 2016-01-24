@@ -3,4 +3,4 @@ An Android app that displays procinfo and runs top and ps. Since Android's versi
 
 You can download it at the Play Store https://play.google.com/store/apps/details?id=com.kritikalerror.cpuinfo
 
-Not maintaining this
+Stopped project
